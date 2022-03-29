@@ -1,4 +1,4 @@
-#Installation
+# Installation
 
 cd into the project dir and run
 ```bash

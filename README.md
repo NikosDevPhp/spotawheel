@@ -1,22 +1,48 @@
 # Installation
 
+Ensure you have docker installed on your machine. If on Linux docker will work natively, if no Windows install Docker Desktop through WSL2.
+
 cd into the project dir and run
+
+```bash
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v $(pwd):/var/www/html \
+    -w /var/www/html \
+    laravelsail/php81-composer:latest \
+    composer install --ignore-platform-reqs
+```
+This will install sail, composer dependencies through a mini container.
+
+Then run the following command to create the network and containers
 ```bash
 ./vendor/bin/sail up -d
 ```
+If for some reason in windows machine this does not work immediately restart your shell.
 
+Create an .env file from the .env.example.
 If you use sail default configuration should be:
 ```bash
+APP_URL=http://spotawheel.test
+
 DB_CONNECTION=mysql
 DB_HOST=mysql
 DB_PORT=3306
 DB_DATABASE=spotawheel
 DB_USERNAME=sail
 DB_PASSWORD=password
+
+// if you use debugger
+SAIL_XDEBUG_MODE=develop,debug 
 ```
 
+Generate app key
+```bash
+./vendor/bin/sail artisan key:generate
+```
 
-Run the migrations with seeds
+With your sql editor of choice (or though command line) create a schema named `spotawheel` and
+run the migrations with seeds
 ```bash
 ./vendor/bin/sail artisan migrate --seed
 ```
